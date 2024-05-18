@@ -1,0 +1,20 @@
+{
+  "dependencies": {
+    "@koa/router": "^12.0.1",
+    "@lokidb/loki": "^2.1.0",
+    "express": "^4.19.2",
+    "koa": "^2.15.3",
+    "koa-static": "^5.0.0"
+  },
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "name": "buchat",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "hello@hubaatif.com",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
