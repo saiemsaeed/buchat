@@ -1,0 +1,18 @@
+#chatlist {
+  overflow: scroll;
+  max-height: 90%;
+}
+
+.activeProfile {
+  background: #6e56cf !important;
+
+  #pname {
+    color: white !important;
+  }
+  #pdate {
+    color: white !important;
+  }
+  #pmessage {
+    color: white !important;
+  }
+}
