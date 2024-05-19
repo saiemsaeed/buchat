@@ -1,7 +1,7 @@
 var activeChatUsername = '';
 var profiles = [];
 var chats = [];
-const url = 'http://localhost:3000';
+const url = window.location.origin;
 
 async function fetchProfiles() {
   try {

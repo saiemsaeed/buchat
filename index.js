@@ -13,6 +13,8 @@ const jwtSecret = 'abc123';
 var db = new Loki('database.db');
 const dbProfiles = db.addCollection('profiles');
 const dbMessages = db.addCollection('messages');
+const domain = process.env.domain || 'localhost';
+const url = process.env.url || 'http://localhost:3000';
 
 if (dbProfiles.count() === 0) {
   try {
@@ -44,7 +46,7 @@ function verifyToken(req) {
 app.get('/api/profiles', async (req, res) => {
   const user = verifyToken(req);
   if (!user) {
-    res.redirect(301, 'http://localhost:3000/signin');
+    res.redirect(301, `${url}/signin`);
     return;
   }
 
@@ -55,7 +57,7 @@ app.get('/api/profiles', async (req, res) => {
 app.get('/api/messages/:username', async (req, res) => {
   const user = verifyToken(req);
   if (!user) {
-    res.redirect(301, 'http://localhost:3000/signin');
+    res.redirect(301, `${url}/signin`);
     return;
   }
 
@@ -75,7 +77,8 @@ app.post('/api/messages/:username', async (req, res) => {
 
   const loginUser = verifyToken(req);
   if (!loginUser) {
-    res.redirect(301, 'http://localhost:3000/signin');
+    res.redirect(301, `${url}/signin`);
+    return;
   }
   const username = req.params.username;
   const message = {
@@ -99,7 +102,7 @@ app.post('/api/signin', async (req, res) => {
     res.status(404).json();
   }
   const token = jwt.sign(user, jwtSecret);
-  res.cookie('token', token, { maxAge: 900000, httpOnly: true, domain: 'localhost' });
+  res.cookie('token', token, { maxAge: 900000, httpOnly: true, domain });
   res.status(200).json(user);
 });
 
@@ -107,7 +110,8 @@ app.get('/', async (req, res) => {
   const user = verifyToken(req);
   if (!user) {
     res.cookie('token', '', { maxAge: 0 });
-    res.redirect(301, 'http://localhost:3000/signin');
+    res.redirect(301, `${url}/signin`);
+    return;
   }
 
   res.sendFile(path.join(__dirname, 'index.html'));
@@ -116,7 +120,8 @@ app.get('/', async (req, res) => {
 app.get('/signin', async (req, res) => {
   const user = verifyToken(req);
   if (user) {
-    res.redirect(301, 'http://localhost:3000/');
+    res.redirect(301, url);
+    return;
   }
 
   res.sendFile(path.join(__dirname, 'signin.html'));
@@ -128,5 +133,5 @@ app.post('/api/signout', async (req, res) => {
 });
 
 app.listen(3000, () => {
-  console.log('Server is running on http://localhost:3000');
+  console.log('Server is running on ', url);
 });
