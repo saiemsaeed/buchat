@@ -1,122 +1,29 @@
 [
   {
-    "username": "saiembae",
-    "name": "Saiem Bae",
-    "profilePicture": "profile-saiem.jpeg",
+    "username": "01-134212-058",
+    "name": "Huba Saiem",
+    "profilePicture": "profile-placeholder.jpg",
     "status": "online",
-    "lastMessage": "I Love You ❤️",
-    "lastMessageDate": "Today"
+    "lastMessage": "",
+    "lastMessageDate": "Today",
+    "password": "123456"
   },
   {
-    "username": "humaazhar",
+    "username": "01-134212-075",
     "name": "Huma Azhar",
     "profilePicture": "profile-huma.webp",
     "status": "offline",
-    "lastMessage": "Hello",
-    "lastMessageDate": "15 April"
+    "lastMessage": "",
+    "lastMessageDate": "15 April",
+    "password": "123456"
   },
   {
-    "username": "muhammadabdullah",
+    "username": "01-134212-080",
     "name": "Muhammad Abdullah",
     "profilePicture": "profile-abdullah.jpeg",
     "status": "offline",
-    "lastMessage": "Goodbye",
-    "lastMessageDate": "16 April"
-  },
-  {
-    "username": "johndoe",
-    "name": "John Doe",
-    "profilePicture": "profile-placeholder.jpg",
-    "status": "online",
-    "lastMessage": "Hey there!",
-    "lastMessageDate": "Today"
-  },
-  {
-    "username": "janesmith",
-    "name": "Jane Smith",
-    "profilePicture": "profile-placeholder.jpg",
-    "status": "offline",
-    "lastMessage": "How are you?",
-    "lastMessageDate": "Yesterday"
-  },
-  {
-    "username": "mikejohnson",
-    "name": "Mike Johnson",
-    "profilePicture": "profile-placeholder.jpg",
-    "status": "online",
-    "lastMessage": "What's up?",
-    "lastMessageDate": "Today"
-  },
-  {
-    "username": "emilydavis",
-    "name": "Emily Davis",
-    "profilePicture": "profile-placeholder.jpg",
-    "status": "offline",
-    "lastMessage": "Good morning!",
-    "lastMessageDate": "2 days ago"
-  },
-  {
-    "username": "alexwilson",
-    "name": "Alex Wilson",
-    "profilePicture": "profile-placeholder.jpg",
-    "status": "online",
-    "lastMessage": "See you later!",
-    "lastMessageDate": "Today"
-  },
-  {
-    "username": "sarahthompson",
-    "name": "Sarah Thompson",
-    "profilePicture": "profile-placeholder.jpg",
-    "status": "offline",
-    "lastMessage": "Nice to meet you!",
-    "lastMessageDate": "Yesterday"
-  },
-  {
-    "username": "davidbrown",
-    "name": "David Brown",
-    "profilePicture": "profile-placeholder.jpg",
-    "status": "online",
-    "lastMessage": "How's it going?",
-    "lastMessageDate": "Today"
-  },
-  {
-    "username": "jessicalee",
-    "name": "Jessica Lee",
-    "profilePicture": "profile-placeholder.jpg",
-    "status": "offline",
-    "lastMessage": "Hey!",
-    "lastMessageDate": "Today"
-  },
-  {
-    "username": "ryanjohnson",
-    "name": "Ryan Johnson",
-    "profilePicture": "profile-placeholder.jpg",
-    "status": "offline",
-    "lastMessage": "Good night!",
-    "lastMessageDate": "Yesterday"
-  },
-  {
-    "username": "emmawilson",
-    "name": "Emma Wilson",
-    "profilePicture": "profile-placeholder.jpg",
-    "status": "online",
-    "lastMessage": "How are you doing?",
-    "lastMessageDate": "Today"
-  },
-  {
-    "username": "michaelbrown",
-    "name": "Michael Brown",
-    "profilePicture": "profile-placeholder.jpg",
-    "status": "offline",
-    "lastMessage": "See you soon!",
-    "lastMessageDate": "2 days ago"
-  },
-  {
-    "username": "sophiedavis",
-    "name": "Sophie Davis",
-    "profilePicture": "profile-placeholder.jpg",
-    "status": "online",
-    "lastMessage": "Good luck!",
-    "lastMessageDate": "Today"
+    "lastMessage": "",
+    "lastMessageDate": "16 April",
+    "password": "123456"
   }
 ]

@@ -139,12 +139,10 @@ function generateProfiles() {
 
 window.addEventListener('load', async function () {
   profiles = await fetchProfiles();
-  activeChatUsername = profiles[1].username;
-  console.log(profiles);
+  activeChatUsername = profiles[0].username;
   generateChats();
   generateProfiles();
-  const messages = await fetchMessages(profiles[1].username);
-  loadUserMessages(profiles[1].username, messages);
+  loadUserMessages(profiles[0].username);
 });
 
 function searchProfiles() {
@@ -167,7 +165,7 @@ function searchProfiles() {
 }
 
 function generateMessage(message, profile) {
-  if (message.sender === activeChatUsername) {
+  if (message.sender === '01-134212-058') {
     return `
       <div class="message me mb-4 flex text-right">
         <div class="flex-1 px-2">
@@ -204,35 +202,54 @@ function generateMessage(message, profile) {
   `;
 }
 
-function sendMessage() {
+async function sendMessage() {
   var chatInput = document.getElementById('chat-input');
   var chatMessages = document.getElementById('messages-container');
 
   var profile = profiles.find((profile) => profile.username === activeChatUsername);
 
   var chat = chats.find((chat) => chat.username === activeChatUsername);
+
   chat.messages.push({
     sender: 'current',
     text: chatInput.value,
     timestamp: new Date().toLocaleString(),
   });
+
+  console.log({ url, activeChatUsername, chatInput: chatInput.value });
+
+  try {
+    await fetch(`${url}/api/messages/${activeChatUsername}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        username: '01-134212-058',
+      },
+      body: JSON.stringify({ text: chatInput.value }),
+    });
+  } catch (e) {
+    console.error(e);
+  }
+
   chatMessages.innerHTML += generateMessage(
     {
-      sender: 'current',
+      sender: '01-134212-058',
       text: chatInput.value,
       timestamp: new Date().toLocaleString(),
     },
     profile,
   );
+
   chatInput.value = '';
   scrollToBottom();
 }
 
-function loadUserMessages(username, messages) {
-  console.log(username, messages, 'sss');
+async function loadUserMessages(username) {
+  const messages = await fetchMessages(username);
   const nextProfile = profiles.find((profile) => profile.username === username);
   const activeProfileEl = document.getElementById(`profile-${activeChatUsername}`);
   const nextProfileEl = document.getElementById(`profile-${username}`);
+
   if (activeProfileEl) {
     activeProfileEl.classList.remove('activeProfile');
   }
@@ -245,4 +262,15 @@ function loadUserMessages(username, messages) {
   messages.forEach((message) => {
     chatMessages.innerHTML += generateMessage(message, nextProfile);
   });
+}
+
+async function signOut() {
+  try {
+    await fetch(`${url}/api/signout`, {
+      method: 'POST',
+    });
+    window.location.href = `${url}/signin`;
+  } catch (e) {
+    console.error(e);
+  }
 }

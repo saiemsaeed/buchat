@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bahria University Chat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+      <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+        <img
+          class="mx-auto h-18 w-auto"
+          src="https://scontent-ber1-1.xx.fbcdn.net/v/t39.30808-6/310557255_586320939964432_1937467386147574603_n.png?_nc_cat=101&ccb=1-7&_nc_sid=5f2048&_nc_ohc=Fa_wQ7wGGBoQ7kNvgHbyW8E&_nc_ht=scontent-ber1-1.xx&oh=00_AYBhwPrj7cjwhayjVYYJ09SuT40G4brkjRsQ-Bv5UsyaxA&oe=664FF572"
+          alt="Bahria University"
+        />
+        <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+          Sign in to your account
+        </h2>
+      </div>
+      <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <form id="signin-form" class="space-y-6" onsubmit="return signin(event)">
+          <ul
+            class="mb-4 items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex"
+          >
+            <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r">
+              <div class="flex items-center ps-3">
+                <input
+                  id="horizontal-list-radio-student"
+                  type="radio"
+                  value="student"
+                  name="userType"
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300"
+                  checked
+                />
+                <label
+                  for="horizontal-list-radio-student"
+                  class="w-full py-3 ms-2 text-sm font-medium text-gray-900"
+                  >Student
+                </label>
+              </div>
+            </li>
+            <li class="w-full">
+              <div class="flex items-center ps-3">
+                <input
+                  id="horizontal-list-radio-faculty"
+                  type="radio"
+                  value="faculty"
+                  name="userType"
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300"
+                />
+                <label
+                  for="horizontal-list-radio-faculty"
+                  class="w-full py-3 ms-2 text-sm font-medium text-gray-900"
+                  >Faculty</label
+                >
+              </div>
+            </li>
+          </ul>
+          <div>
+            <label for="enrollment" class="block text-sm font-medium leading-6 text-gray-900"
+              >Enrollment #</label
+            >
+            <div class="mt-2">
+              <input
+                id="enrollment"
+                name="enrollment"
+                type="text"
+                required
+                class="block w-full rounded-md border-0 pl-1 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
+          <div>
+            <label for="name" class="block text-sm font-medium leading-6 text-gray-900">Name</label>
+            <div class="mt-2">
+              <input
+                id="name"
+                name="name"
+                type="text"
+                required
+                class="block w-full rounded-md border-0 pl-1 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
+          <div>
+            <div class="flex items-center justify-between">
+              <label for="password" class="block text-sm font-medium leading-6 text-gray-900"
+                >Password</label
+              >
+            </div>
+            <div class="mt-2">
+              <input
+                id="password"
+                name="password"
+                type="password"
+                required
+                class="block w-full rounded-md border-0 pl-1 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
+
+          <div>
+            <button
+              type="submit"
+              class="flex w-full justify-center rounded-md bg-[#6e56cf] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >
+              Sign in
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <script>
+      function signin(e) {
+        console.log('signin');
+        e.preventDefault();
+
+        const formData = new FormData(e.target);
+        const data = {};
+        formData.forEach((value, key) => {
+          data[key] = value;
+        });
+
+        fetch('http://localhost:3000/api/signin', {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          method: 'POST',
+          body: JSON.stringify(data),
+        }).then((res) => {
+          console.log(res, 'res');
+          if (res.ok) {
+            window.location.href = 'http://localhost:3000/';
+          } else {
+            alert(res.message);
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

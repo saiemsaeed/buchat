@@ -1,10 +1,16 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
-const { Loki } = require('@lokidb/loki');
-
 const app = express();
-var db = new Loki('sandbox.db');
+const jwt = require('jsonwebtoken');
+const { Loki } = require('@lokidb/loki');
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+const jwtSecret = 'abc123';
+var db = new Loki('database.db');
 const dbProfiles = db.addCollection('profiles');
 const dbMessages = db.addCollection('messages');
 
@@ -12,73 +18,113 @@ if (dbProfiles.count() === 0) {
   try {
     const data = fs.readFileSync('./public/profiles.json', 'utf8');
     const jsonData = JSON.parse(data);
-    console.log(jsonData);
     dbProfiles.insert(jsonData);
   } catch (err) {
     console.error('Error reading or parsing the file:', err);
   }
 }
 
-if (dbMessages.count() === 0) {
-  const profiles = dbProfiles.find();
-  const senderProfile = profiles[0];
-
-  profiles.forEach((profile) => {
-    dbMessages.insert([
-      {
-        sender: profile.username,
-        receiver: senderProfile.username,
-        text: 'See you later',
-        timestamp: '4/16/2024, 8:31:41 AM',
-      },
-      {
-        sender: senderProfile.username,
-        receiver: profile.username,
-        text: 'See you later',
-        timestamp: '4/16/2024, 8:31:41 AM',
-      },
-    ]);
-  });
-}
-
 const staticDir = path.join(__dirname, '/public');
 
 app.use(express.static(staticDir));
 
+function verifyToken(req) {
+  try {
+    const token = req.cookies['token'];
+    if (!token) {
+      return null;
+    }
+
+    return jwt.verify(token, jwtSecret);
+  } catch (error) {
+    return null;
+  }
+}
+
 app.get('/api/profiles', async (req, res) => {
-  const profiles = dbProfiles.find();
+  const user = verifyToken(req);
+  if (!user) {
+    res.redirect(301, 'http://localhost:3000/signin');
+    return;
+  }
+
+  const profiles = dbProfiles.find({ username: { $not: { $eq: user.username } } });
   res.send(profiles);
 });
 
 app.get('/api/messages/:username', async (req, res) => {
-  const loginUser = dbProfiles.findOne({ username: 'saiembae' });
+  const user = verifyToken(req);
+  if (!user) {
+    res.redirect(301, 'http://localhost:3000/signin');
+    return;
+  }
+
   const username = req.params.username;
   const messages = dbMessages.find({
     $or: [
-      { sender: username, receiver: loginUser.username },
-      { sender: loginUser.username, receiver: username },
+      { sender: username, receiver: user.username },
+      { sender: user.username, receiver: username },
     ],
   });
 
-  console.log(messages);
   res.json(messages);
 });
 
 app.post('/api/messages/:username', async (req, res) => {
-  const loginUser = dbProfiles.findOne({ username: 'saiembae' });
-  const username = req.params.username;
-  const messages = dbMessages.find({
-    $or: [
-      { sender: username, receiver: loginUser.username },
-      { sender: loginUser.username, receiver: username },
-    ],
-  });
+  console.log('POST /api/messages/:username');
 
-  res.send(messages);
+  const loginUser = verifyToken(req);
+  if (!loginUser) {
+    res.redirect(301, 'http://localhost:3000/signin');
+  }
+  const username = req.params.username;
+  const message = {
+    sender: loginUser.username,
+    receiver: username,
+    text: req.body.text,
+    timestamp: new Date().toLocaleString(),
+  };
+
+  const msg = dbMessages.insert(message);
+  if (msg) {
+    res.status(200).json(msg);
+  }
+
+  res.status(500).send();
+});
+
+app.post('/api/signin', async (req, res) => {
+  const user = dbProfiles.findOne({ username: req.body.enrollment, password: req.body.password });
+  if (!user) {
+    res.status(404).json();
+  }
+  const token = jwt.sign(user, jwtSecret);
+  res.cookie('token', token, { maxAge: 900000, httpOnly: true, domain: 'localhost' });
+  res.status(200).json(user);
 });
 
 app.get('/', async (req, res) => {
+  const user = verifyToken(req);
+  if (!user) {
+    res.cookie('token', '', { maxAge: 0 });
+    res.redirect(301, 'http://localhost:3000/signin');
+  }
+
   res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.get('/signin', async (req, res) => {
+  const user = verifyToken(req);
+  if (user) {
+    res.redirect(301, 'http://localhost:3000/');
+  }
+
+  res.sendFile(path.join(__dirname, 'signin.html'));
+});
+
+app.post('/api/signout', async (req, res) => {
+  res.cookie('token', '', { maxAge: 0 });
+  res.status(200).json();
 });
 
 app.listen(3000, () => {
